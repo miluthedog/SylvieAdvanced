@@ -1,0 +1,10 @@
+*\__pycache__
+*\.bat
+*\.db
+
+.venv/*
+.env
+
+test.py
+modules/*
+config.json
