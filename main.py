@@ -1,11 +1,12 @@
 import discord
 from discord.ext import commands
 import asyncio
-import config
 import pathlib
 import os
+import client_config
 
-sylvie = commands.Bot(command_prefix="Sylvie ", intents=discord.Intents.all())
+
+sylvie = commands.Bot(command_prefix="Sylvie", intents=discord.Intents.all())
 
 BASE_DIR = pathlib.Path(__file__).parent
 MODULE_DIR = BASE_DIR / "modules"
@@ -18,7 +19,7 @@ async def loadModules():
 
 
 async def SylvieOS():
-    APIkey = config.token.discord
+    APIkey = client_config.token.discord
     if not os.path.isdir("./db"):
         os.mkdir("db")
     async with sylvie:

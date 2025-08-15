@@ -1,0 +1,14 @@
+{
+    "servers": [
+        {
+            "id": "supabase",
+            "command": "cmd",
+            "args": ["/c", "npx", "-y", "@supabase/mcp-server-supabase@latest"],
+            "env": {
+                "SUPABASE_ACCESS_TOKEN": "YOUR_SUPABASE_ACCESS_TOKEN",
+                "PROJECT_ID": "YOUR_PROJECT_ID"
+            },
+            "description": "Supabase's database management"
+        }
+    ]
+}
