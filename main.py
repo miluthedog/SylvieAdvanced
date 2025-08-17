@@ -3,7 +3,12 @@ from discord.ext import commands
 import asyncio
 import pathlib
 import os
-import client_config
+import json
+from dotenv import load_dotenv
+from modules.mcp.client import MCPClient
+from jsonhandler import load_json
+
+load_dotenv()
 
 
 sylvie = commands.Bot(command_prefix="Sylvie", intents=discord.Intents.all())
@@ -17,14 +22,19 @@ async def loadModules():
         if file.name != "__init__.py":
             await sylvie.load_extension(f"modules.{file.name[:-3]}")
 
-
 async def SylvieOS():
-    APIkey = client_config.token.discord
+    APIkey = os.getenv("DISCORDTOKEN")
     if not os.path.isdir("./db"):
         os.mkdir("db")
     async with sylvie:
         await loadModules()
         await sylvie.start(APIkey)
+
+
+async def MCPserver():
+    client = MCPClient()
+    await client.connect_to_servers(load_json(file_name="server_config.json", title="servers"))
+
 
 if __name__ == "__main__":
     asyncio.run(SylvieOS())

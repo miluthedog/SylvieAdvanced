@@ -4,7 +4,4 @@
 
 .venv/*
 .env
-
-test.py
-modules/*
 server_config.json
