@@ -52,8 +52,20 @@ class ChatClient():
         
         return function_response_parts
 
-    async def process(self, user_prompt: str) -> str:
-        system_prompt = "Hello"
+    async def ai_process(self, user_prompt: str) -> str:
+        system_prompt = """
+        You are an AI agent that can call tools to assist the user. You will receive a user prompt and may respond with text or call tools to perform actions.
+
+        You have 5 turns to complete the task, you can respond and keep memery of all turns. Think step by step and use tools as needed.
+        All initial turns will only be saved in memory, the final response will be returned to the user.
+        The last response must be a text response, report what tool used.
+
+        If you call a tool, you must provide the tool name and arguments in the function call format.
+        You can run multiple tools in a single response, or run tools continous.
+        You can only call tools that are available on the connected servers.
+        If no tools are available, you must complete the task using only text responses.
+        If you cannot complete the task, respond with an appropriate message.
+        """
         user_prompt_content = add_role('user', user_prompt)
         conversation_history = [user_prompt_content]
 
@@ -89,15 +101,10 @@ class ChatClient():
 
 
     async def chat_loop(self):
-        print(f"\nAvailable tools from all servers:")
-        for tool_name, server_id in self.tool_to_server_mapping.items():
-            print(f"  - {tool_name} (from {server_id})")
-  
         while True:
-            print("="*50)
             user_prompt = input("User: ").strip()
-            if user_prompt.lower() in ['exit', 'quit']:
+            if user_prompt.lower() in ['ok', 'tks']:
                 break
 
-            response = await self.process(user_prompt)
-            print("\nAgent: " + response)
+            response = await self.ai_process(user_prompt)
+            return response
