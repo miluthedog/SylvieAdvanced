@@ -20,8 +20,6 @@ class agentrespond(commands.Cog):
 
         if isinstance(message.channel, discord.DMChannel):
             chat = ChatClient(self.sylvie.mcp_client)
-            
-            await message.channel.send(f"Hello {message.author.name}, I got your message: {message.content}")
             result = await chat.ai_respond(message.content)
             await message.channel.send(f"{result}")
         else:
