@@ -32,7 +32,7 @@ class ChatClient():
                 print(f"ERROR: Tool '{tool_name}' not found in any server")
             else:
                 print(f"Calling tool: {tool_name} (from server {server_id}) with args {tool_args}")
-                
+
                 try:
                     session = self.sessions[server_id]
                     result = await session.call_tool(tool_name, tool_args)
@@ -46,7 +46,7 @@ class ChatClient():
                 response=function_response
             )
             function_response_parts.append(function_response_part)
-        
+
         return function_response_parts
 
     async def ai_process(self, user_prompt: str) -> str:
@@ -81,9 +81,9 @@ class ChatClient():
             ai_response_parts = response.candidates[0].content.parts
             ai_response_content = add_role('assistant', ai_response_parts)
             conversation_history.append(ai_response_content)
-            
+
             function_call_parts = [part for part in ai_response_parts if hasattr(part, 'function_call') and part.function_call]
-            
+
             if function_call_parts:
                 print(f"Agent requested {len(function_call_parts)} tool call(s)")
                 function_response_parts = await self.execute_function_calls(function_call_parts)
