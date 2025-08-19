@@ -5,7 +5,6 @@ from google import genai
 from google.genai import types
 from google.genai.types import GenerateContentConfig
 from jsonhandler import add_role
-from modules.mcp.client import MCPClient
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -14,14 +13,12 @@ model = "gemini-2.0-flash-001"
 max_turns = 5
 
 class ChatClient():
-    def __init__(self):
+    def __init__(self, mcp_client):
         self.ai_client = genai.Client(api_key=api_key)
-
-        client = MCPClient()
-        self.tools_list = client.tools_list
-        self.tool_to_server_mapping = client.tool_to_server_mapping
-        self.sessions = client.sessions
-
+        
+        self.tools_list = mcp_client.tools_list
+        self.tool_to_server_mapping = mcp_client.tool_to_server_mapping
+        self.sessions = mcp_client.sessions
 
     async def execute_function_calls(self, function_call_parts: List) -> List:
         function_response_parts = []
@@ -99,10 +96,8 @@ class ChatClient():
 
         return response.text
 
-
-    async def chat_loop(self):
+    async def ai_respond(self, user_prompt=None) -> str:
         while True:
-            user_prompt = input("User: ").strip()
             if user_prompt.lower() in ['ok', 'tks']:
                 break
 

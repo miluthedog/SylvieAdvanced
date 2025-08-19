@@ -22,19 +22,25 @@ async def loadModules():
         if file.name != "__init__.py":
             await sylvie.load_extension(f"modules.{file.name[:-3]}")
 
-async def SylvieOS():
+async def SylvieOS(mcp_client):
     APIkey = os.getenv("DISCORDTOKEN")
     if not os.path.isdir("./db"):
         os.mkdir("db")
+    
+    sylvie.mcp_client = mcp_client
+    
     async with sylvie:
         await loadModules()
         await sylvie.start(APIkey)
 
-
 async def MCPserver():
     client = MCPClient()
     await client.connect_to_servers(load_json(file_name="server_config.json", title="servers"))
-
+    return client
 
 if __name__ == "__main__":
-    asyncio.run(SylvieOS())
+    async def run():
+        mcp_client = await MCPserver()
+        await SylvieOS(mcp_client)
+    
+    asyncio.run(run())

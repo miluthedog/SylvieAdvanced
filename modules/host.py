@@ -14,14 +14,15 @@ class agentrespond(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        chat = ChatClient()
         allowed_ids = load_json(file_name="client_config.json", title="user_id")
         if message.author.id not in allowed_ids:
             return
 
         if isinstance(message.channel, discord.DMChannel):
+            chat = ChatClient(self.sylvie.mcp_client)
+            
             await message.channel.send(f"Hello {message.author.name}, I got your message: {message.content}")
-            result = await chat.chat_loop()
+            result = await chat.ai_respond(message.content)
             await message.channel.send(f"{result}")
         else:
             await self.sylvie.process_commands(message)
