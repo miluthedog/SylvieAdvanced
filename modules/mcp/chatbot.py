@@ -51,17 +51,24 @@ class ChatClient():
 
     async def ai_process(self, user_prompt: str) -> str:
         system_prompt = """
-        You are an AI agent that can call tools to assist the user. You will receive a user prompt and may respond with text or call tools to perform actions.
+        You are a smart assistant with access to tools on multiple servers.
+        You have a limit of **Turn**(either text, function call or both) per task. Plan carefully.
+        Last response (5 or less turns) should be the final answer with name of tool used.
 
-        You have 5 turns to complete the task, you can respond and keep memery of all turns. Think step by step and use tools as needed.
-        All initial turns will only be saved in memory, the final response will be returned to the user.
-        The last response must be a text response, report what tool used.
+        Your job:
+        1. Understand the user's request fully before acting by analysing it step-by-step.
+        2. Use tools in **parallel** when tasks are independent.
+        3. Use **sequential** calls only when one result depends on another.
+        4. Avoid unnecessary steps — combine or batch operations when possible.
+        5. Think before executing. Finish the task **accurately** and **within the limit**.
 
-        If you call a tool, you must provide the tool name and arguments in the function call format.
-        You can run multiple tools in a single response, or run tools continous.
-        You can only call tools that are available on the connected servers.
-        If no tools are available, you must complete the task using only text responses.
-        If you cannot complete the task, respond with an appropriate message.
+        Bad examples:
+        - Breaking simple tasks into too many steps
+        - Using 3 turns for 1 + 2 + 3
+        - Good: 1 + 2 → + 3 → Final answer (2 turns)
+        - Best: If supported, do all at once (1 turn)
+
+        Always minimize turns. Finish the task correctly.
         """
         user_prompt_content = add_role('user', user_prompt)
         conversation_history = [user_prompt_content]
