@@ -12,7 +12,7 @@ api_key = os.getenv("GEMINIAPIKEY")
 model = "gemini-2.0-flash-001"
 max_turns = 5
 
-class ChatClient():
+class AgentRespond():
     def __init__(self, mcp_client):
         self.ai_client = genai.Client(api_key=api_key)
         

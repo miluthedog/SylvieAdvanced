@@ -1,10 +1,10 @@
 import discord
 from discord.ext import commands
 from jsonhandler import load_json
-from modules.mcp.chatbot import ChatClient
+from modules.mcp.agent import AgentRespond
 
 
-class agentrespond(commands.Cog):
+class mcpAgent(commands.Cog):
     def __init__(self, sylvie):
         self.sylvie = sylvie
 
@@ -19,7 +19,7 @@ class agentrespond(commands.Cog):
             return
 
         if isinstance(message.channel, discord.DMChannel):
-            chat = ChatClient(self.sylvie.mcp_client)
+            chat = AgentRespond(self.sylvie.mcp_client)
             result = await chat.ai_respond(message.content)
             await message.channel.send(f"{result}")
         else:
@@ -27,4 +27,4 @@ class agentrespond(commands.Cog):
 
 
 async def setup(sylvie):
-    await sylvie.add_cog(agentrespond(sylvie))
+    await sylvie.add_cog(mcpAgent(sylvie))
