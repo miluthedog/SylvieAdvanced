@@ -1,4 +1,3 @@
-import asyncio
 import os
 from typing import List
 from google import genai
